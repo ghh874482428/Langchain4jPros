@@ -1,0 +1,11 @@
+# 通用规则示例
+*.log          # 忽略日志文件
+/temp/         # 忽略根目录temp文件夹
+!*/important/  # 不忽略所有important子目录
+**/cache/      # 忽略任意层级的cache目录‌:ml-citation{ref="4,5" data="citationList"}
+
+.idea/
+.venv/
+.ssh/
+.git/
+.vscode/

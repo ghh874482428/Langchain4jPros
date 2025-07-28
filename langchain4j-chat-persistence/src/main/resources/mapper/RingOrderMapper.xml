@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinontech.study.dao.RingOrderDao">
+    <insert id="insert" parameterType="com.sinontech.study.entity.RingOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ring_order(user_id, ring_name, ring_type, status)
+        VALUES(#{userId}, #{ringName}, #{ringType}, #{status})
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE ring_order SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM ring_order WHERE id = #{id}
+    </delete>
+
+    <select id="findById" resultType="com.sinontech.study.entity.RingOrder">
+        SELECT * FROM ring_order WHERE id = #{id}
+    </select>
+
+    <select id="findByUserId" resultType="com.sinontech.study.entity.RingOrder">
+        SELECT * FROM ring_order WHERE user_id = #{userId}
+    </select>
+</mapper>

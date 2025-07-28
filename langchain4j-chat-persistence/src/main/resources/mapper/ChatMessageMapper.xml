@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinontech.study.dao.ChatMessageDao">
+    <insert id="insert" parameterType="com.sinontech.study.entity.ChatMessageEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat_message(session_id, content, role, message_index)
+        VALUES(#{sessionId}, #{content}, #{role}, #{messageIndex})
+    </insert>
+
+    <delete id="deleteBySessionId">
+        DELETE FROM chat_message WHERE session_id = #{sessionId}
+    </delete>
+
+    <select id="findBySessionId" resultType="com.sinontech.study.entity.ChatMessageEntity">
+        SELECT * FROM chat_message
+        WHERE session_id = #{sessionId}
+        ORDER BY message_index ASC
+    </select>
+</mapper>

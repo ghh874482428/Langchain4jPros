@@ -1,0 +1,40 @@
+server:
+  port: 9010
+  servlet:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.242.0:3306/videoring?useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 192.168.100.100
+      password: 123456
+      port: 6379
+      database: 0
+      connect-timeout: 3s
+      timeout: 2s
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+model:
+  models:
+    qwen:
+      type: qwen
+      apiKey: ${aliQwen-api}
+      modelName: qwen-plus
+      baseUrl: https://dashscope.aliyuncs.com/compatible-mode/v1
+    deepseek:
+      type: deepseek
+      apiKey: ${deepseek-api}
+      modelName: deepseek-chat
+      baseUrl: https://api.deepseek.com/v1

@@ -7,6 +7,8 @@ import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Component
 public class ModelFactory {
 
@@ -23,6 +25,9 @@ public class ModelFactory {
                 .apiKey(config.getApiKey())
                 .modelName(config.getModelName())
                 .baseUrl(config.getBaseUrl())
+                .logRequests(true) // 日志级别设置为debug才有效
+                .logResponses(true)// 日志级别设置为debug才有效
+                .timeout(Duration.ofSeconds(2))//向大模型发送请求时，如在指定时间内没有收到响应，该请求将被中断并报request timed out
                 .build();
     }
 
@@ -32,6 +37,9 @@ public class ModelFactory {
                 .apiKey(config.getApiKey())
                 .modelName(config.getModelName())
                 .baseUrl(config.getBaseUrl())
+                .logRequests(true) // 日志级别设置为debug才有效
+                .logResponses(true)// 日志级别设置为debug才有效
+                .timeout(Duration.ofSeconds(2))//向大模型发送请求时，如在指定时间内没有收到响应，该请求将被中断并报request timed out
                 .build();
     }
 }

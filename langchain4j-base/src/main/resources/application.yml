@@ -26,6 +26,11 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+# 只有日志级别调整为debug级别，同时配置以上 langchain 日志输出开关才有效
+logging:
+  level:
+    dev.langchain4j: DEBUG
+
 model:
   models:
     qwen:

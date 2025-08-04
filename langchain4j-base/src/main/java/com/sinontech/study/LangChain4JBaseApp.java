@@ -10,10 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com.sinontech.study.dao")
-public class ChatPersistenceLangChain4JApp
+public class LangChain4JBaseApp
 {
     public static void main(String[] args)
     {
-        SpringApplication.run(ChatPersistenceLangChain4JApp.class,args);
+        SpringApplication.run(LangChain4JBaseApp.class,args);
     }
 }

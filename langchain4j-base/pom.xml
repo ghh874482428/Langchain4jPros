@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.sinontech.study</groupId>
-    <artifactId>langchain4j-chat-persistence</artifactId>
+    <artifactId>langchain4j-base</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

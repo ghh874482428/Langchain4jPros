@@ -19,10 +19,8 @@
         <module>langchain4j-chat-stream</module>
         <module>langchain4j-chat-memory</module>
         <module>langchain4j-chat-prompt</module>
-        <module>langchain4j-chat-persistence</module>
+        <module>langchain4j-base</module>
         <module>langchain4j-chat-functioncalling</module>
-        <module>langchain4j-chat-embedding</module>
-        <module>langchain4j-apipro</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

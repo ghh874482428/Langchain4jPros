@@ -6,6 +6,6 @@ import dev.langchain4j.service.UserMessage;
 
 public interface RegularChatAssistant {
 
-    @SystemMessage(fromResource = "/system-message.yml")
+//    @SystemMessage(fromResource = "/system-message.yml")
     String chat(@MemoryId String sessionId, @UserMessage String message);
 }

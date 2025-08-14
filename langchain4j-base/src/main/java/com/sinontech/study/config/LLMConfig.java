@@ -1,9 +1,19 @@
 package com.sinontech.study.config;
 
 import com.sinontech.study.config.redis.RedisChatMemoryStore;
+import com.sinontech.study.entity.ChatHistory;
 import com.sinontech.study.service.lc4j.RegularChatAssistant;
 import com.sinontech.study.service.lc4j.StreamingChatAssistant;
 import com.sinontech.study.tool.RingOrderTool;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import dev.langchain4j.store.embedding.qdrant.QdrantEmbeddingStore;
+import io.qdrant.client.QdrantClient;
+import io.qdrant.client.QdrantGrpcClient;
 import jakarta.annotation.Resource;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -11,9 +21,10 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.StreamingChatModel;
 import com.sinontech.study.config.llmfactory.ModelFactory;
 import dev.langchain4j.service.AiServices;
-import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Optional;
 
 @Configuration
 public class LLMConfig
@@ -43,7 +54,7 @@ public class LLMConfig
      * @return 配置了Redis内存存储的RegularChatAssistant实例
      */
     @Bean(name = "regularChatAssistant")
-    public RegularChatAssistant chatMemoryAssistant(ChatModel chatModel)
+    public RegularChatAssistant chatMemoryAssistant(ChatModel chatModel,EmbeddingStore<TextSegment> embeddingStore)
     {
 
         ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
@@ -55,6 +66,7 @@ public class LLMConfig
         return AiServices.builder(RegularChatAssistant.class)
                 .chatModel(chatModel)
                 .chatMemoryProvider(chatMemoryProvider)
+                .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
                 .tools(ringOrderTool)
                 .build();
     }
@@ -87,5 +99,54 @@ public class LLMConfig
                 .tools(ringOrderTool)
                 .build();
     }
+
+    @Bean
+    public EmbeddingModel embeddingModel()
+    {
+        return OpenAiEmbeddingModel.builder()
+                .apiKey(System.getenv("aliQwen-api"))
+                .modelName("text-embedding-v3-large")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                .build();
+    }
+    /**
+     * 创建Qdrant客户端
+     * @return
+     */
+    @Bean
+    public QdrantClient qdrantClient() {
+        /**
+         * 创建并配置Qdrant客户端实例，建立与Qdrant向量数据库的连接
+         * 仅负责建立连接通道，不执行任何集合创建操作
+         */
+        QdrantGrpcClient.Builder grpcClientBuilder =
+                QdrantGrpcClient.newBuilder("192.168.100.100", 6334, false);
+        return new QdrantClient(grpcClientBuilder.build());
+    }
+
+    @Bean
+    public EmbeddingStore<TextSegment> embeddingStore() {
+        /**
+         * 这是连接到已有集合的配置，而非创建新集合
+         * 若指定的集合不存在，后续操作会抛出"集合不存在"的异常
+         */
+        return QdrantEmbeddingStore.builder()
+                .client(qdrantClient())
+                .collectionName("test-qdrant")
+                .build();
+    }
+
+
+
+    /**
+     * 内存嵌入存储实例
+     * @return InMemoryEmbeddingStore实例
+     */
+    @Bean
+    public InMemoryEmbeddingStore<TextSegment> inMemoryEmbeddingStore() {
+        return new InMemoryEmbeddingStore<>();
+    }
+
+
 
 }
